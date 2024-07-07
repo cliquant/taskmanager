@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Register from '@/pages/auth/register';
 import Login from '@/pages/auth/login';
 import DashboardIndex from '@/pages/dashboard/index';
+import Logout from '@/pages/auth/logout';
 import { ThemeProvider } from "@/components/theme-provider";
 import { AuthProvider } from '@/context/AuthContext';
 import PrivateRoute from '@/pages/auth/PrivateRoute';
@@ -30,6 +31,7 @@ const App: React.FC = () => {
                   <DashboardIndex />
               </PrivateRoute>
             } />
+            <Route path="/logout" element={<Logout />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

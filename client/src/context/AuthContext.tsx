@@ -1,7 +1,7 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
+import axios from 'axios';
 
 interface AuthData {
-  token: string;
   email: string;
   firstName: string;
   lastName: string;
@@ -12,48 +12,44 @@ interface AuthContextProps {
   authData: AuthData | null;
   setAuthData: (data: AuthData) => void;
   clearAuthData: () => void;
+  checkAuth: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({
   authData: null,
   setAuthData: () => {},
-  clearAuthData: () => {}
+  clearAuthData: () => {},
+  checkAuth: () => {},
 });
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [authData, setAuthDataState] = useState<AuthData | null>(() => {
-    const token = localStorage.getItem('token');
-    const email = localStorage.getItem('email');
-    const firstName = localStorage.getItem('firstName');
-    const lastName = localStorage.getItem('lastName');
-    const groupId = localStorage.getItem('groupId');
-
-    if (token && email && firstName && lastName && groupId) {
-      return { token, email, firstName, lastName, groupId: Number(groupId) };
-    }
-    return null;
-  });
+  const [authData, setAuthDataState] = useState<AuthData | null>(null);
 
   const setAuthData = useCallback((data: AuthData) => {
-    localStorage.setItem('token', data.token);
-    localStorage.setItem('email', data.email);
-    localStorage.setItem('firstName', data.firstName);
-    localStorage.setItem('lastName', data.lastName);
-    localStorage.setItem('groupId', data.groupId.toString());
     setAuthDataState(data);
   }, []);
 
   const clearAuthData = useCallback(() => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('email');
-    localStorage.removeItem('firstName');
-    localStorage.removeItem('lastName');
-    localStorage.removeItem('groupId');
     setAuthDataState(null);
   }, []);
 
+  const checkAuth = useCallback(async () => {
+    try {
+      const response = await axios.get('/api/v1/auth/profile');
+      if (response.data.user) {
+        setAuthData(response.data.user);
+      }
+    } catch {
+      clearAuthData();
+    }
+  }, [setAuthData, clearAuthData]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
   return (
-    <AuthContext.Provider value={{ authData, setAuthData, clearAuthData }}>
+    <AuthContext.Provider value={{ authData, setAuthData, clearAuthData, checkAuth }}>
       {children}
     </AuthContext.Provider>
   );

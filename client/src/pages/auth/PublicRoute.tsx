@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 
@@ -7,9 +7,13 @@ interface PublicRouteProps {
 }
 
 const PublicRoute: React.FC<PublicRouteProps> = ({ children }) => {
-  const { authData } = useAuth();
+  const { authData, checkAuth } = useAuth();
 
-  if (authData?.token) {
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  if (authData) {
     return <Navigate to="/dashboard" replace />;
   }
 

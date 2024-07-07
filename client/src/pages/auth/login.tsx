@@ -16,15 +16,14 @@ import { useAuth } from "@/context/AuthContext";
 import { Helmet } from "react-helmet";
 
 interface LoginResponse {
-  token?: string;
-  user?: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    groupId: number;
-  };
-  error?: string;
-  errors?: { msg: string }[];
+    user?: {
+        email: string;
+        firstName: string;
+        lastName: string;
+        groupId: number;
+    };
+    error?: string;
+    errors?: { msg: string }[];
 }
 
 export default function Login() {
@@ -68,15 +67,11 @@ export default function Login() {
         `/api/v1/auth/login`,
         { email, password }
       );
-      if (response.data.token && response.data.user) {
-        setAuthData({
-          token: response.data.token,
-          email: response.data.user.email,
-          firstName: response.data.user.firstName,
-          lastName: response.data.user.lastName,
-          groupId: response.data.user.groupId,
-        });
+      if (response.data.user) {
         notification("success", "Login successful!");
+        setTimeout(() => {
+            setAuthData(response.data.user!);
+        }, 2500);
       } else if (response.data.errors) {
         response.data.errors.forEach((error) => {
           notification("error", error.msg);

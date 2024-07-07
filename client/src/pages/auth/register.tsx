@@ -96,7 +96,7 @@ export default function Register() {
   return (
     <>
       <Helmet>
-        <title>Task-Manager | Login</title>
+        <title>Task-Manager | Register</title>
       </Helmet>
       <ToastContainer theme="dark" />
       <div className="flex justify-center items-center min-h-screen">

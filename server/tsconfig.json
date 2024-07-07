@@ -6,8 +6,9 @@
     "outDir": "./dist",
     "esModuleInterop": true,
     "strict": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"],
     "skipLibCheck": true
   },
-  "include": ["src"],
+  "include": ["src/**/*", "src/types/session.d.ts"],
   "exclude": ["node_modules"]
 }

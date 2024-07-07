@@ -42,10 +42,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { Helmet } from "react-helmet";
 
 export default function DashboardIndex() {
   return (
-    <div className="grid h-screen w-full pl-[53px]">
+    <>
+      <Helmet>
+        <title>Task-Manager | Dashboard</title>
+      </Helmet>
+      <div className="grid h-screen w-full pl-[53px]">
       <aside className="inset-y fixed  left-0 z-20 flex h-full flex-col border-r">
         <div className="border-b p-2">
           <Button variant="outline" size="icon" aria-label="Home">
@@ -459,5 +464,6 @@ export default function DashboardIndex() {
         </main>
       </div>
     </div>
+    </>
   )
 }

@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 
@@ -7,9 +7,13 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { authData } = useAuth();
+  const { authData, checkAuth } = useAuth();
 
-  if (!authData?.token) {
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  if (!authData) {
     return <Navigate to="/login" replace />;
   }
 
