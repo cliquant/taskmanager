@@ -1,0 +1,72 @@
+{
+    "settings": {
+        "permissions": {
+            "group_permissions": [{ "id": 1, "name": "VIEW_USERS"}, {"id": 2, "name": "MANAGE_USERS"}, {"id": 3, "name": "DO_TASKS"}],
+            "project_permissions": ["ADD_ASSIGNEES", "REMOVE_ASSIGNEES", "RENAME_PROJECT", "DELETE_PROJECT"],
+            "task_permissions": ["RENAME_TASK", "ADD_ASSIGNEES", "REMOVE_ASSIGNEES", "COMMENT", "DELETE_TASK"]
+        },
+        "groups": [
+            {
+                "id": 1,
+                "display_name": "Employee",
+                "permissions": [3]
+            },
+            {
+                "id": 2,
+                "display_name": "Admin",
+                "permissions": [1, 2, 3]
+            }
+        ],
+        "possible_task_statuses": ["FINISHED", "CANCELED", "TODO", "IN_PROGRESS"]
+    },
+    "users": [
+        { 
+            "id": 1, 
+            "first_name": "Rick", 
+            "last_name": "Stevens", 
+            "email": "user@domain.com", 
+            "password": "bcrypt",
+            "group": 1,
+            "projects": [1],
+            "tasks": [1]
+        }
+    ],
+    "projects": [
+        {
+            "id": 1, 
+            "name": "Website rebuild", 
+            "assignees": [
+                {
+                    "id": 1,
+                    "permissions": ["ADD_ASSIGNEES", "REMOVE_ASSIGNEES", "RENAME_PROJECT", "DELETE_PROJECT"]
+                }
+            ]
+        }
+    ],
+    "tasks": [
+        {
+            "project_id": 1,
+            "assignees": [
+                {
+                    "id": 1,
+                    "permissions": ["RENAME_TASK", "ADD_ASSIGNEES", "REMOVE_ASSIGNEES", "COMMENT", "DELETE_TASK"]
+                }
+            ],
+            "task": {
+                "name": "Authentication",
+                "description": "Our new website Authentication re-build",
+                "status": "TODO",
+                "subtasks": [
+                    { 
+                        "id": 1, 
+                        "name": "Finish registration page",
+                        "status": "TODO"
+                    }
+                ],
+                "comments": [
+                    { "from": 1, "when": "DATE", "text": "Noob!" }
+                ]
+            }
+        }
+    ]
+}
