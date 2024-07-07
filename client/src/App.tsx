@@ -1,26 +1,40 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import Register from './pages/auth/register.tsx';
-import Login from './pages/auth/login.tsx';
-import DashboardIndex from './pages/dashboard/index.tsx';
-import { ThemeProvider } from "./components/theme-provider.tsx"
+import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import Register from './pages/auth/register';
+import Login from './pages/auth/login';
+import DashboardIndex from './pages/dashboard/index';
+import { ThemeProvider } from "./components/theme-provider";
+import { AuthProvider } from './context/AuthContext';
+import PrivateRoute from './pages/auth/PrivateRoute';
+import PublicRoute from './pages/auth/PublicRoute';
 
-export default function App() {
+const App: React.FC = () => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
           <Routes>
-              <Route path="/" element={<Navigate to="/login" replace />} />
-              <Route path="/login" element={
-                  <Login />
-              } />
-              <Route path="/register" element={
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={
+                <PublicRoute>
+                    <Login />
+                </PublicRoute>
+            } />
+            <Route path="/register" element={
+              <PublicRoute>
                   <Register />
-              } />
-              <Route path="/dashboard" element={
+              </PublicRoute>
+            } />
+            <Route path="/dashboard" element={
+              <PrivateRoute>
                   <DashboardIndex />
-              } />
+              </PrivateRoute>
+            } />
           </Routes>
-      </BrowserRouter>
+        </BrowserRouter>
+      </AuthProvider>
     </ThemeProvider>
   );
-}
+};
+
+export default App;
