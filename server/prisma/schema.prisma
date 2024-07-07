@@ -8,104 +8,75 @@ generator client {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  firstName    String
-  lastName     String
-  email        String         @unique
-  password     String
-  groupId      Int
-  group        Group          @relation(fields: [groupId], references: [id])
-  projects     Project[]      @relation("UserProjects")
-  tasks        Task[]         @relation("UserTasks")
-  comments     Comment[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  UserProjects UserProjects[]
-  UserTasks    UserTasks[]
+  id        Int       @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String    @unique
+  password  String
+  group     Group     @relation(fields: [groupId], references: [id])
+  groupId   Int
+  projects  Project[]
+  tasks     Task[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Comment   Comment[]
 }
 
 model Group {
-  id          Int               @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   displayName String
+  permissions Permission[] @relation("GroupPermissions")
   users       User[]
-  permissions GroupPermission[]
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+}
+
+model Permission {
+  id       Int     @id @default(autoincrement())
+  name     String
+  category String
+  groups   Group[] @relation("GroupPermissions")
+
+  @@unique([name, category], name: "name_category") // Naming the unique constraint
 }
 
 model Project {
-  id           Int            @id @default(autoincrement())
-  name         String
-  assignees    User[]         @relation("UserProjects")
-  tasks        Task[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
-  UserProjects UserProjects[]
+  id        Int      @id @default(autoincrement())
+  name      String
+  assignees User[]
+  tasks     Task[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Task {
-  id          Int         @id @default(autoincrement())
-  projectId   Int
-  project     Project     @relation(fields: [projectId], references: [id])
-  name        String
-  description String
-  status      String
-  subtasks    Subtask[]
-  comments    Comment[]
-  assignees   User[]      @relation("UserTasks")
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  UserTasks   UserTasks[]
+  id           Int        @id @default(autoincrement())
+  projectId    Int
+  project      Project    @relation(fields: [projectId], references: [id])
+  name         String
+  description  String
+  statusId     Int
+  status       TaskStatus @relation(fields: [statusId], references: [id])
+  assignees    User[]
+  subtasks     Task[]     @relation("ParentTask")
+  parentTaskId Int? // This is now a simple optional Int field.
+  parentTask   Task?      @relation("ParentTask", fields: [parentTaskId], references: [id]) // Correctly relate back to parent task
+  comments     Comment[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
 }
 
-model Subtask {
-  id        Int      @id @default(autoincrement())
-  taskId    Int
-  task      Task     @relation(fields: [taskId], references: [id])
-  name      String
-  status    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+model TaskStatus {
+  id    Int    @id @default(autoincrement())
+  name  String
+  tasks Task[]
 }
 
 model Comment {
   id        Int      @id @default(autoincrement())
+  text      String
+  fromId    Int
+  from      User     @relation(fields: [fromId], references: [id])
   taskId    Int
   task      Task     @relation(fields: [taskId], references: [id])
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  text      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model GroupPermission {
-  id         Int      @id @default(autoincrement())
-  groupId    Int
-  group      Group    @relation(fields: [groupId], references: [id])
-  permission Int
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-}
-
-model UserProjects {
-  userId    Int
-  projectId Int
-  user      User    @relation(fields: [userId], references: [id])
-  project   Project @relation(fields: [projectId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@id([userId, projectId])
-}
-
-model UserTasks {
-  userId    Int
-  taskId    Int
-  user      User    @relation(fields: [userId], references: [id])
-  task      Task    @relation(fields: [taskId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@id([userId, taskId])
 }

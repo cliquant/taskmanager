@@ -2,8 +2,8 @@
     "settings": {
         "permissions": {
             "group_permissions": [{ "id": 1, "name": "VIEW_USERS"}, {"id": 2, "name": "MANAGE_USERS"}, {"id": 3, "name": "DO_TASKS"}],
-            "project_permissions": ["ADD_ASSIGNEES", "REMOVE_ASSIGNEES", "RENAME_PROJECT", "DELETE_PROJECT"],
-            "task_permissions": ["RENAME_TASK", "ADD_ASSIGNEES", "REMOVE_ASSIGNEES", "COMMENT", "DELETE_TASK"]
+            "project_permissions": [{ "id": 1, "name": "ADD_ASSIGNEES"}, { "id": 2, "name": "REMOVE_ASSIGNEES"}, { "id": 3, "name": "RENAME_PROJECT"}, { "id": 4, "name": "DELETE_PROJECT"}],
+            "task_permissions": [{ "id": 1, "name": "RENAME_TASK" }, { "id": 2, "name": "ADD_ASSIGNEES" }, { "id": 3, "name": "REMOVE_ASSIGNEES"}, { "id": 4, "name": "COMMENT" }, { "id": 5, "name": "DELETE_TASK" }]
         },
         "groups": [
             {
@@ -17,7 +17,7 @@
                 "permissions": [1, 2, 3]
             }
         ],
-        "possible_task_statuses": ["FINISHED", "CANCELED", "TODO", "IN_PROGRESS"]
+        "possible_task_statuses": [{ "id": 1, "name": "FINISHED"}, { "id": 2, "name": "CANCELED" }, { "id": 3, "name": "TODO" }, { "id": 4, "name": "IN_PROGRESS" }]
     },
     "users": [
         { 
@@ -28,7 +28,9 @@
             "password": "bcrypt",
             "group": 1,
             "projects": [1],
-            "tasks": [1]
+            "tasks": [1],
+            "createdAt": "",
+            "updatedAt": ""
         }
     ],
     "projects": [
@@ -38,9 +40,11 @@
             "assignees": [
                 {
                     "id": 1,
-                    "permissions": ["ADD_ASSIGNEES", "REMOVE_ASSIGNEES", "RENAME_PROJECT", "DELETE_PROJECT"]
+                    "permissions": [1, 2, 3, 4]
                 }
-            ]
+            ],
+            "createdAt": "",
+            "updatedAt": "" 
         }
     ],
     "tasks": [
@@ -49,24 +53,28 @@
             "assignees": [
                 {
                     "id": 1,
-                    "permissions": ["RENAME_TASK", "ADD_ASSIGNEES", "REMOVE_ASSIGNEES", "COMMENT", "DELETE_TASK"]
+                    "permissions": [1, 2, 3, 4, 5]
                 }
             ],
             "task": {
                 "name": "Authentication",
                 "description": "Our new website Authentication re-build",
-                "status": "TODO",
+                "status": 3,
                 "subtasks": [
                     { 
                         "id": 1, 
                         "name": "Finish registration page",
-                        "status": "TODO"
+                        "status": 3,
+                        "createdAt": "",
+                        "updatedAt": "" 
                     }
                 ],
                 "comments": [
-                    { "from": 1, "when": "DATE", "text": "Noob!" }
+                    { "from": 1, "text": "Noob!", "createdAt": "", "updatedAt": "" }
                 ]
-            }
+            },
+            "createdAt": "",
+            "updatedAt": "" 
         }
     ]
 }
