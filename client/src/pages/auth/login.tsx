@@ -68,10 +68,8 @@ export default function Login() {
         { email, password }
       );
       if (response.data.user) {
+        setAuthData(response.data.user!);
         notification("success", "Login successful!");
-        setTimeout(() => {
-            setAuthData(response.data.user!);
-        }, 2500);
       } else if (response.data.errors) {
         response.data.errors.forEach((error) => {
           notification("error", error.msg);

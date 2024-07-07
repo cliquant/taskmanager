@@ -38,6 +38,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const response = await axios.get('/api/v1/auth/profile');
       if (response.data.user) {
         setAuthData(response.data.user);
+      } else {
+        clearAuthData();
       }
     } catch {
       clearAuthData();
