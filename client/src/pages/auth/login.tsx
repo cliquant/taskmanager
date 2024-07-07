@@ -1,12 +1,19 @@
-import { useState, ChangeEvent } from 'react';
-import { Button } from "../../components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios, { AxiosResponse } from 'axios';
-import { useAuth } from '../../context/AuthContext';
+import { useState, ChangeEvent } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios, { AxiosResponse } from "axios";
+import { useAuth } from "@/context/AuthContext";
+import { Helmet } from "react-helmet";
 
 interface LoginResponse {
   token?: string;
@@ -22,11 +29,11 @@ interface LoginResponse {
 
 export default function Login() {
   const { setAuthData } = useAuth();
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
-  function notification(type: 'error' | 'success', message: string) {
+  function notification(type: "error" | "success", message: string) {
     if (type === "error") {
       return toast.error(message, {
         position: "top-right",
@@ -57,7 +64,10 @@ export default function Login() {
     setTimeout(() => setIsButtonDisabled(false), 1000);
 
     try {
-      const response: AxiosResponse<LoginResponse> = await axios.post(`/api/v1/auth/login`, { email, password });
+      const response: AxiosResponse<LoginResponse> = await axios.post(
+        `/api/v1/auth/login`,
+        { email, password }
+      );
       if (response.data.token && response.data.user) {
         setAuthData({
           token: response.data.token,
@@ -68,7 +78,7 @@ export default function Login() {
         });
         notification("success", "Login successful!");
       } else if (response.data.errors) {
-        response.data.errors.forEach(error => {
+        response.data.errors.forEach((error) => {
           notification("error", error.msg);
         });
       } else {
@@ -91,6 +101,9 @@ export default function Login() {
 
   return (
     <>
+      <Helmet>
+        <title>Task-Manager | Login</title>
+      </Helmet>
       <ToastContainer theme="dark" />
       <div className="flex justify-center items-center min-h-screen">
         <Card className="mx-auto max-w-sm">
@@ -110,7 +123,9 @@ export default function Login() {
                   placeholder="example@domain.com"
                   required
                   value={email}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setEmail(e.target.value)
+                  }
                 />
               </div>
               <div className="grid gap-2">
@@ -122,10 +137,17 @@ export default function Login() {
                   type="password"
                   required
                   value={password}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setPassword(e.target.value)
+                  }
                 />
               </div>
-              <Button onClick={handleLogin} type="submit" className="w-full" disabled={isButtonDisabled}>
+              <Button
+                onClick={handleLogin}
+                type="submit"
+                className="w-full"
+                disabled={isButtonDisabled}
+              >
                 {isButtonDisabled ? "Please wait..." : "Login"}
               </Button>
             </div>

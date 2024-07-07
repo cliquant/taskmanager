@@ -1,11 +1,19 @@
-import { useState, ChangeEvent } from 'react';
-import { Button } from "../../components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios, { AxiosResponse } from 'axios';
+import { useState, ChangeEvent } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios, { AxiosResponse } from "axios";
+import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 interface RegisterResponse {
   error?: string;
@@ -13,13 +21,14 @@ interface RegisterResponse {
 }
 
 export default function Register() {
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const navigate = useNavigate();
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(false);
 
-  function notification(type: 'error' | 'success', message: string) {
+  function notification(type: "error" | "success", message: string) {
     if (type === "error") {
       return toast.error(message, {
         position: "top-right",
@@ -50,15 +59,21 @@ export default function Register() {
     setTimeout(() => setIsButtonDisabled(false), 1000);
 
     try {
-      const response: AxiosResponse<RegisterResponse> = await axios.post(`/api/v1/auth/register`, { firstName, lastName, email, password });
+      const response: AxiosResponse<RegisterResponse> = await axios.post(
+        `/api/v1/auth/register`,
+        { firstName, lastName, email, password }
+      );
       if (response.data.error) {
         notification("error", response.data.error);
       } else if (response.data.errors) {
-        response.data.errors.forEach(error => {
+        response.data.errors.forEach((error) => {
           notification("error", error.msg);
         });
       } else {
         notification("success", "Registration successful!");
+        setTimeout(() => {
+          navigate("/login");
+        }, 5000);
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
@@ -67,7 +82,10 @@ export default function Register() {
             notification("error", err.msg);
           });
         } else {
-          notification("error", error.response.data.error || "Registration failed");
+          notification(
+            "error",
+            error.response.data.error || "Registration failed"
+          );
         }
       } else {
         notification("error", "Registration failed");
@@ -77,6 +95,9 @@ export default function Register() {
 
   return (
     <>
+      <Helmet>
+        <title>Task-Manager | Login</title>
+      </Helmet>
       <ToastContainer theme="dark" />
       <div className="flex justify-center items-center min-h-screen">
         <Card className="mx-auto max-w-sm">
@@ -96,7 +117,9 @@ export default function Register() {
                     placeholder="Max"
                     required
                     value={firstName}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setFirstName(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setFirstName(e.target.value)
+                    }
                   />
                 </div>
                 <div className="grid gap-2">
@@ -106,7 +129,9 @@ export default function Register() {
                     placeholder="Robinson"
                     required
                     value={lastName}
-                    onChange={(e: ChangeEvent<HTMLInputElement>) => setLastName(e.target.value)}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      setLastName(e.target.value)
+                    }
                   />
                 </div>
               </div>
@@ -118,7 +143,9 @@ export default function Register() {
                   placeholder="m@example.com"
                   required
                   value={email}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setEmail(e.target.value)
+                  }
                 />
               </div>
               <div className="grid gap-2">
@@ -128,10 +155,17 @@ export default function Register() {
                   type="password"
                   required
                   value={password}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setPassword(e.target.value)
+                  }
                 />
               </div>
-              <Button onClick={handleRegister} type="submit" className="w-full" disabled={isButtonDisabled}>
+              <Button
+                onClick={handleRegister}
+                type="submit"
+                className="w-full"
+                disabled={isButtonDisabled}
+              >
                 {isButtonDisabled ? "Please wait..." : "Create an account"}
               </Button>
             </div>

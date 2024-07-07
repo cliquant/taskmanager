@@ -16,8 +16,8 @@ import {
   Triangle,
   Turtle,
 } from "lucide-react"
-import { Badge } from "../../components/ui/badge"
-import { Button } from "../../components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Drawer,
   DrawerContent,
@@ -25,23 +25,23 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "../../components/ui/drawer"
-import { Input } from "../../components/ui/input"
-import { Label } from "../../components/ui/label"
+} from "@/components/ui/drawer"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/select"
-import { Textarea } from "../../components/ui/textarea"
+} from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../../components/ui/tooltip"
+} from "@/components/ui/tooltip"
 
 export default function DashboardIndex() {
   return (
