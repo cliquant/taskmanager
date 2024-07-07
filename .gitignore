@@ -3,6 +3,8 @@ server/node_modules
 client/node_modules
 server/.env
 server/env
+server/src/
+server/prisma/migrations
 
 # Logs
 logs
