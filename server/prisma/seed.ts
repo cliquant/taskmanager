@@ -26,7 +26,7 @@ async function main() {
       displayName: "Employee",
       permissions: {
         connect: [
-          { name_category: { name: "DO_TASKS", category: "group" } } // Correcting the syntax
+          { name_category: { name: "DO_TASKS", category: "group" } }
         ]
       }
     }
