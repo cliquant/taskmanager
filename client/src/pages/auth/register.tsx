@@ -7,13 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Toaster } from "@/components/ui/sonner"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import axios, { AxiosResponse } from "axios";
 import { useNavigate } from "react-router-dom";
+
 import { Helmet } from "react-helmet";
+import { toast } from "sonner"
 
 interface RegisterResponse {
   error?: string;
@@ -30,27 +31,13 @@ export default function Register() {
 
   function notification(type: "error" | "success", message: string) {
     if (type === "error") {
-      return toast.error(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      return toast("Uh oh! Something went wrong.", {
+        description: message,
+      })
     } else if (type === "success") {
-      return toast.success(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      return toast("You did it, nice job.", {
+        description: message,
+      })
     }
   }
 
@@ -98,7 +85,7 @@ export default function Register() {
       <Helmet>
         <title>Task-Manager | Register</title>
       </Helmet>
-      <ToastContainer theme="dark" />
+      <Toaster />
       <div className="flex justify-center items-center min-h-screen">
         <Card className="mx-auto max-w-sm">
           <CardHeader>

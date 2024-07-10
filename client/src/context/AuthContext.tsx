@@ -13,6 +13,7 @@ interface AuthContextProps {
   setAuthData: (data: AuthData) => void;
   clearAuthData: () => void;
   checkAuth: () => void;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({
@@ -20,6 +21,7 @@ const AuthContext = createContext<AuthContextProps>({
   setAuthData: () => {},
   clearAuthData: () => {},
   checkAuth: () => {},
+  logout: () => {},
 });
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -46,12 +48,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, [setAuthData, clearAuthData]);
 
+  const logout = useCallback(async () => {
+    try {
+      await axios.post('/api/v1/auth/logout');
+      clearAuthData();
+    } catch (error) {
+      console.error('Failed to logout:', error);
+    }
+  }, [clearAuthData]);
+
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
   return (
-    <AuthContext.Provider value={{ authData, setAuthData, clearAuthData, checkAuth }}>
+    <AuthContext.Provider value={{ authData, setAuthData, clearAuthData, checkAuth, logout }}>
       {children}
     </AuthContext.Provider>
   );

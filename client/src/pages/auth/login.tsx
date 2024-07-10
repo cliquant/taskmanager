@@ -7,13 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Toaster } from "@/components/ui/sonner"
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "sonner"
 import "react-toastify/dist/ReactToastify.css";
 import axios, { AxiosResponse } from "axios";
 import { useAuth } from "@/context/AuthContext";
 import { Helmet } from "react-helmet";
+
 
 interface LoginResponse {
     user?: {
@@ -34,27 +36,13 @@ export default function Login() {
 
   function notification(type: "error" | "success", message: string) {
     if (type === "error") {
-      return toast.error(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-        theme: "dark",
-      });
+      return toast("Uh oh! Something went wrong.", {
+        description: message
+        })
     } else if (type === "success") {
-      return toast.success(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: 0,
-        theme: "dark",
-      });
+      return toast("You did it, nice job.", {
+        description: message,
+      })
     }
   }
 
@@ -97,7 +85,8 @@ export default function Login() {
       <Helmet>
         <title>Task-Manager | Login</title>
       </Helmet>
-      <ToastContainer theme="dark" />
+      <Toaster />
+      {/* <ToastContainer theme="dark" /> */}
       <div className="flex justify-center items-center min-h-screen">
         <Card className="mx-auto max-w-sm">
           <CardHeader>
